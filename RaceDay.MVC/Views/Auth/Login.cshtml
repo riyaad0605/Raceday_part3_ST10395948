@@ -1,0 +1,52 @@
+@model LoginViewModel
+@{ ViewData["Title"] = "Sign In"; }
+
+<div class="auth-card">
+    <div class="card">
+        <div class="card-header">
+            <i class="bi bi-trophy-fill fs-1"></i>
+            <h3 class="mt-2 mb-0">Welcome to RaceDay</h3>
+            <p class="mb-0 opacity-75">Sign in to your account</p>
+        </div>
+        <div class="card-body p-4">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger"><i class="bi bi-exclamation-circle me-2"></i>@ViewBag.Error</div>
+            }
+            <form method="post">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Email Address</label>
+                    <input type="email" name="Email" class="form-control" value="@Model.Email" required placeholder="you@example.com" />
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Password</label>
+                    <input type="password" name="Password" class="form-control" required placeholder="Enter your password" />
+                </div>
+                <button type="submit" class="btn btn-raceday w-100 py-2 mb-3">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                </button>
+            </form>
+            <hr />
+            <p class="text-center mb-0">
+                Don't have an account? <a href="/Auth/Register" class="text-decoration-none" style="color: var(--rd-primary);">Create one</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-body">
+            <h6 class="text-muted mb-3"><i class="bi bi-info-circle me-1"></i>Demo Accounts</h6>
+            <div class="row g-2">
+                <div class="col-6">
+                    <small class="d-block text-muted">Organiser</small>
+                    <small><strong>thabo@raceday.co.za</strong></small>
+                </div>
+                <div class="col-6">
+                    <small class="d-block text-muted">Participant</small>
+                    <small><strong>sipho@email.co.za</strong></small>
+                </div>
+            </div>
+            <small class="text-muted d-block mt-2">Password for all: <strong>Pass123!</strong></small>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,49 @@
+@model List<EnrolmentViewModel>
+@{ ViewData["Title"] = $"Enrolments - {ViewBag.EventName}"; }
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0"><i class="bi bi-people me-2" style="color: var(--rd-primary);"></i>Enrolments &mdash; @ViewBag.EventName</h2>
+    <a href="/Events" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="empty-state">
+        <i class="bi bi-people d-block"></i>
+        <h5>No enrolments yet</h5>
+        <p>Participants will appear here once they enrol.</p>
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Participant</th>
+                            <th>Category</th>
+                            <th>Enrolled Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var en in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@en.ParticipantName</td>
+                                <td>@en.CategoryName</td>
+                                <td>@en.EnrolmentDate.ToString("dd MMM yyyy HH:mm")</td>
+                                <td>
+                                    <span class="badge badge-@(en.Status == "Confirmed" ? "confirmed" : "pending")">@en.Status</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <p class="text-muted mt-2">Total: @Model.Count enrolment(s)</p>
+}

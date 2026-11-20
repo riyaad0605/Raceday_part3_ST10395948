@@ -1,0 +1,74 @@
+@model List<EventViewModel>
+@{ ViewData["Title"] = "Browse Events"; }
+
+<div class="hero-section text-center px-3">
+    <h1 class="fw-bold"><i class="bi bi-lightning-charge-fill me-2"></i>Find Your Next Race</h1>
+    <p class="lead opacity-75">Browse upcoming events and push your limits</p>
+</div>
+
+<div class="filter-bar">
+    <form method="get" class="row g-2 align-items-end">
+        <div class="col-md-6">
+            <label class="form-label small text-muted">Search</label>
+            <input type="text" name="search" class="form-control" value="@ViewBag.Search" placeholder="Search events by name or location..." />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label small text-muted">Event Type</label>
+            <select name="eventType" class="form-select">
+                <option value="">All Types</option>
+                <option value="Run" selected="@(ViewBag.EventType == "Run")">Run</option>
+                <option value="Walk" selected="@(ViewBag.EventType == "Walk")">Walk</option>
+                <option value="Cycle" selected="@(ViewBag.EventType == "Cycle")">Cycle</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-raceday w-100"><i class="bi bi-search me-1"></i>Filter</button>
+        </div>
+    </form>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="empty-state">
+        <i class="bi bi-calendar-x d-block"></i>
+        <h5>No events found</h5>
+        <p>Check back later for upcoming events!</p>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var ev in Model)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card event-card h-100 position-relative">
+                    @if (!string.IsNullOrEmpty(ev.BannerImageUrl))
+                    {
+                        <img src="@ev.BannerImageUrl" class="card-img-top" alt="@ev.Name" />
+                    }
+                    else
+                    {
+                        <div class="banner-placeholder">
+                            <i class="bi bi-@(ev.EventType == "Run" ? "person-walking" : ev.EventType == "Cycle" ? "bicycle" : "signpost-2")"></i>
+                        </div>
+                    }
+                    <span class="badge bg-info badge-event-type">@ev.EventType</span>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">@ev.Name</h5>
+                        <p class="card-text text-muted small">@ev.Description</p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted small"><i class="bi bi-geo-alt me-1"></i>@ev.Location</span>
+                            <span class="text-muted small"><i class="bi bi-people me-1"></i>@ev.TotalEnrolments enrolled</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-semibold" style="color: var(--rd-primary);">
+                                <i class="bi bi-calendar3 me-1"></i>@ev.EventDate.ToString("dd MMM yyyy")
+                            </span>
+                            <a href="/Events/Details/@ev.EventId" class="btn btn-sm btn-raceday">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

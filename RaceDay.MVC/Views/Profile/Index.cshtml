@@ -1,0 +1,57 @@
+@model UserViewModel
+@{ ViewData["Title"] = "My Profile"; }
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-raceday text-white text-center py-4">
+                @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+                {
+                    <img src="@Model.ProfileImageUrl" class="profile-img mb-2" alt="Profile" />
+                }
+                else
+                {
+                    <div class="profile-img mx-auto mb-2 d-flex align-items-center justify-content-center"
+                         style="background: rgba(255,255,255,0.2); font-size: 3rem;">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                }
+                <h3 class="mb-0">@Model.FirstName @Model.LastName</h3>
+                <span class="badge bg-light text-dark mt-1">@Model.Role</span>
+            </div>
+            <div class="card-body p-4">
+                <div class="mb-4">
+                    <h5 class="fw-bold"><i class="bi bi-camera me-2"></i>Profile Picture</h5>
+                    <form method="post" asp-action="UploadImage" enctype="multipart/form-data" class="d-flex gap-2 align-items-end">
+                        <div class="flex-grow-1">
+                            <input type="file" name="profileImage" class="form-control" accept="image/*" required />
+                        </div>
+                        <button type="submit" class="btn btn-raceday"><i class="bi bi-upload me-1"></i>Upload</button>
+                    </form>
+                </div>
+
+                <hr />
+
+                <h5 class="fw-bold"><i class="bi bi-person-gear me-2"></i>Update Details</h5>
+                <form method="post" asp-action="Update">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">First Name</label>
+                            <input type="text" name="FirstName" class="form-control" value="@Model.FirstName" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Last Name</label>
+                            <input type="text" name="LastName" class="form-control" value="@Model.LastName" required />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email</label>
+                        <input type="email" class="form-control" value="@Model.Email" disabled />
+                        <small class="text-muted">Email cannot be changed.</small>
+                    </div>
+                    <button type="submit" class="btn btn-raceday"><i class="bi bi-check-circle me-2"></i>Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+@model List<EventViewModel>
+@{ ViewData["Title"] = "Manage Events"; }
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0"><i class="bi bi-calendar-event me-2" style="color: var(--rd-primary);"></i>My Events</h2>
+    <a href="/Events/Create" class="btn btn-raceday"><i class="bi bi-plus-circle me-2"></i>Create Event</a>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="empty-state">
+        <i class="bi bi-calendar-plus d-block"></i>
+        <h5>No events yet</h5>
+        <p>Start by creating your first event!</p>
+        <a href="/Events/Create" class="btn btn-raceday">Create Event</a>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Enrolled</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ev in Model.OrderByDescending(e => e.EventDate))
+                {
+                    <tr>
+                        <td class="fw-semibold">@ev.Name</td>
+                        <td>@ev.EventDate.ToString("dd MMM yyyy")</td>
+                        <td>@ev.Location</td>
+                        <td><span class="badge bg-info">@ev.EventType</span></td>
+                        <td><span class="badge badge-@ev.Status.ToLower()">@ev.Status</span></td>
+                        <td>@ev.TotalEnrolments</td>
+                        <td class="text-end">
+                            <a href="/Events/Edit/@ev.EventId" class="btn btn-sm btn-outline-raceday" title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="/Enrolments/EventEnrolments?eventId=@ev.EventId" class="btn btn-sm btn-outline-secondary" title="Enrolments">
+                                <i class="bi bi-people"></i>
+                            </a>
+                            <a href="/Results/EventResults?eventId=@ev.EventId" class="btn btn-sm btn-outline-secondary" title="Results">
+                                <i class="bi bi-stopwatch"></i>
+                            </a>
+                            <form method="post" asp-action="Delete" asp-route-id="@ev.EventId" class="d-inline"
+                                  onsubmit="return confirm('Delete this event? This cannot be undone.');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

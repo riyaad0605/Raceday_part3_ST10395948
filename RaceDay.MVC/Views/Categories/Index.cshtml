@@ -1,0 +1,44 @@
+@model List<CategoryViewModel>
+@{ ViewData["Title"] = "Manage Categories"; }
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0"><i class="bi bi-tags me-2" style="color: var(--rd-primary);"></i>Categories</h2>
+    <a href="/Categories/Create" class="btn btn-raceday"><i class="bi bi-plus-circle me-2"></i>Add Category</a>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="empty-state">
+        <i class="bi bi-tags d-block"></i>
+        <h5>No categories yet</h5>
+        <p>Create distance categories that can be linked to events.</p>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var cat in Model)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold">@cat.Name</h5>
+                        <p class="text-muted">@cat.Description</p>
+                        <span class="badge bg-info fs-6">@cat.DistanceKm km</span>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex gap-2">
+                        <a href="/Categories/Edit/@cat.CategoryId" class="btn btn-sm btn-outline-raceday">
+                            <i class="bi bi-pencil me-1"></i>Edit
+                        </a>
+                        <form method="post" asp-action="Delete" asp-route-id="@cat.CategoryId"
+                              onsubmit="return confirm('Delete this category?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash me-1"></i>Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

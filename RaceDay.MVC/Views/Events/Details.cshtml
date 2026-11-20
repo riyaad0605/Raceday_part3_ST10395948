@@ -1,0 +1,130 @@
+@model EventDetailViewModel
+@{ ViewData["Title"] = Model.Event.Name; }
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            @if (!string.IsNullOrEmpty(Model.Event.BannerImageUrl))
+            {
+                <img src="@Model.Event.BannerImageUrl" class="card-img-top" style="max-height: 300px; object-fit: cover;" alt="@Model.Event.Name" />
+            }
+            else
+            {
+                <div class="banner-placeholder" style="height: 200px;">
+                    <i class="bi bi-@(Model.Event.EventType == "Run" ? "person-walking" : Model.Event.EventType == "Cycle" ? "bicycle" : "signpost-2")"></i>
+                </div>
+            }
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h2 class="fw-bold mb-1">@Model.Event.Name</h2>
+                        <span class="badge bg-info me-2">@Model.Event.EventType</span>
+                        <span class="badge badge-@Model.Event.Status.ToLower()">@Model.Event.Status</span>
+                    </div>
+                </div>
+                <p class="lead">@Model.Event.Description</p>
+                <div class="row g-3 mt-3">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-calendar3 fs-4 me-2" style="color: var(--rd-primary);"></i>
+                            <div>
+                                <small class="text-muted d-block">Date</small>
+                                <strong>@Model.Event.EventDate.ToString("dd MMMM yyyy")</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-geo-alt-fill fs-4 me-2" style="color: var(--rd-primary);"></i>
+                            <div>
+                                <small class="text-muted d-block">Location</small>
+                                <strong>@Model.Event.Location</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-people-fill fs-4 me-2" style="color: var(--rd-primary);"></i>
+                            <div>
+                                <small class="text-muted d-block">Enrolled</small>
+                                <strong>@Model.Event.TotalEnrolments participants</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header bg-raceday text-white">
+                <h5 class="mb-0"><i class="bi bi-tags me-2"></i>Race Categories</h5>
+            </div>
+            <div class="card-body p-0">
+                @if (Model.Categories.Count == 0)
+                {
+                    <div class="p-4 text-center text-muted">
+                        <i class="bi bi-tags d-block fs-3 mb-2"></i>
+                        <p>No categories added yet.</p>
+                    </div>
+                }
+                else
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var cat in Model.Categories)
+                        {
+                            var isEnrolled = Model.MyEnrolments.Any(e => e.EventCategoryId == cat.EventCategoryId);
+                            var myEnrolment = Model.MyEnrolments.FirstOrDefault(e => e.EventCategoryId == cat.EventCategoryId);
+                            var spotsLeft = cat.MaxParticipants - cat.CurrentEnrolments;
+
+                            <li class="list-group-item p-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="fw-bold mb-1">@cat.CategoryName</h6>
+                                        <small class="text-muted">@cat.DistanceKm km &bull; @cat.CurrentEnrolments / @cat.MaxParticipants spots</small>
+                                    </div>
+                                    @if (Context.Session.GetString("UserRole") == "Participant")
+                                    {
+                                        @if (isEnrolled)
+                                        {
+                                            <div class="text-end">
+                                                <span class="badge badge-confirmed mb-1">Enrolled</span>
+                                                <form method="post" asp-controller="Events" asp-action="Withdraw"
+                                                      asp-route-enrolmentId="@myEnrolment!.EnrolmentId" asp-route-eventId="@Model.Event.EventId">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Withdraw from this category?');">
+                                                        Withdraw
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        }
+                                        else if (spotsLeft > 0)
+                                        {
+                                            <form method="post" asp-controller="Events" asp-action="Enrol"
+                                                  asp-route-eventCategoryId="@cat.EventCategoryId" asp-route-eventId="@Model.Event.EventId">
+                                                <button type="submit" class="btn btn-sm btn-raceday">Enrol</button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Full</span>
+                                        }
+                                    }
+                                </div>
+                                <div class="progress mt-2" style="height: 6px;">
+                                    @{
+                                        var pct = cat.MaxParticipants > 0 ? (int)((double)cat.CurrentEnrolments / cat.MaxParticipants * 100) : 0;
+                                        var barColor = pct >= 90 ? "bg-danger" : pct >= 70 ? "bg-warning" : "bg-success";
+                                    }
+                                    <div class="progress-bar @barColor" style="width: @pct%"></div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<a href="/" class="btn btn-outline-secondary mt-3"><i class="bi bi-arrow-left me-2"></i>Back to Events</a>

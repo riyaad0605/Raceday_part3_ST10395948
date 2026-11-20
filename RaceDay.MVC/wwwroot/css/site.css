@@ -1,0 +1,216 @@
+/* ── RaceDay Brand Theme ───────────────────────────────── */
+:root {
+    --rd-primary: #E63946;
+    --rd-primary-dark: #C1121F;
+    --rd-secondary: #1D3557;
+    --rd-accent: #457B9D;
+    --rd-light: #F1FAEE;
+    --rd-dark: #0D1B2A;
+    --rd-success: #2D6A4F;
+    --rd-warning: #E9C46A;
+    --rd-confirmed: #2D6A4F;
+    --rd-pending: #E9A820;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main { flex: 1; }
+
+/* ── Navbar ────────────────────────────────────────────── */
+.bg-raceday {
+    background: linear-gradient(135deg, var(--rd-secondary) 0%, var(--rd-dark) 100%);
+}
+
+.navbar-brand { font-size: 1.5rem; letter-spacing: 1px; }
+
+/* ── Cards ─────────────────────────────────────────────── */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+}
+
+/* ── Event Cards ───────────────────────────────────────── */
+.event-card .card-img-top {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+}
+
+.event-card .badge-event-type {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+}
+
+/* ── Status Badges ─────────────────────────────────────── */
+.badge-confirmed {
+    background-color: var(--rd-confirmed) !important;
+    color: white;
+}
+
+.badge-pending {
+    background-color: var(--rd-pending) !important;
+    color: #1a1a1a;
+}
+
+.badge-cancelled {
+    background-color: var(--rd-primary) !important;
+    color: white;
+}
+
+.badge-draft {
+    background-color: #6c757d;
+    color: white;
+}
+
+.badge-published {
+    background-color: var(--rd-confirmed);
+    color: white;
+}
+
+.badge-completed {
+    background-color: var(--rd-accent);
+    color: white;
+}
+
+/* ── Buttons ───────────────────────────────────────────── */
+.btn-raceday {
+    background: var(--rd-primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.btn-raceday:hover {
+    background: var(--rd-primary-dark);
+    color: white;
+}
+
+.btn-outline-raceday {
+    border: 2px solid var(--rd-primary);
+    color: var(--rd-primary);
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.btn-outline-raceday:hover {
+    background: var(--rd-primary);
+    color: white;
+}
+
+/* ── Dashboard Stats ───────────────────────────────────── */
+.stat-card {
+    border-left: 4px solid var(--rd-primary);
+    padding: 1.5rem;
+}
+
+.stat-card .stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--rd-secondary);
+}
+
+.stat-card .stat-label {
+    color: #6c757d;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ── Hero Section ──────────────────────────────────────── */
+.hero-section {
+    background: linear-gradient(135deg, var(--rd-secondary) 0%, var(--rd-primary) 100%);
+    color: white;
+    padding: 3rem 0;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+}
+
+/* ── Auth Pages ────────────────────────────────────────── */
+.auth-card {
+    max-width: 460px;
+    margin: 2rem auto;
+}
+
+.auth-card .card-header {
+    background: linear-gradient(135deg, var(--rd-secondary), var(--rd-primary));
+    color: white;
+    text-align: center;
+    padding: 2rem;
+}
+
+/* ── Profile Image ─────────────────────────────────────── */
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--rd-primary);
+}
+
+.profile-img-sm {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* ── Banner Image ──────────────────────────────────────── */
+.banner-placeholder {
+    height: 200px;
+    background: linear-gradient(135deg, var(--rd-secondary), var(--rd-accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 3rem;
+    border-radius: 12px 12px 0 0;
+}
+
+/* ── Tables ────────────────────────────────────────────── */
+.table th {
+    background-color: var(--rd-secondary);
+    color: white;
+    font-weight: 600;
+    border: none;
+}
+
+/* ── Filter Bar ────────────────────────────────────────── */
+.filter-bar {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* ── Empty States ──────────────────────────────────────── */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.4;
+}

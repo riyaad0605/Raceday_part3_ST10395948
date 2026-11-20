@@ -1,0 +1,48 @@
+@model List<ResultViewModel>
+@{ ViewData["Title"] = "My Results"; }
+
+<h2 class="fw-bold mb-4"><i class="bi bi-stopwatch me-2" style="color: var(--rd-primary);"></i>My Race Results</h2>
+
+@if (Model.Count == 0)
+{
+    <div class="empty-state">
+        <i class="bi bi-stopwatch d-block"></i>
+        <h5>No results yet</h5>
+        <p>Your race times and positions will appear here after events are completed.</p>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var r in Model.OrderByDescending(x => x.CapturedAt))
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="fw-bold mb-1">@r.EventName</h5>
+                        <span class="badge bg-info mb-3">@r.CategoryName</span>
+                        <div class="row g-2 mt-2">
+                            <div class="col-6">
+                                <div class="p-2 rounded" style="background: var(--rd-light);">
+                                    <div class="fs-3 fw-bold" style="color: var(--rd-primary);">@r.FormattedTime</div>
+                                    <small class="text-muted">Finish Time</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-2 rounded" style="background: var(--rd-light);">
+                                    <div class="fs-3 fw-bold" style="color: var(--rd-secondary);">
+                                        #@r.Position
+                                    </div>
+                                    <small class="text-muted">Position</small>
+                                </div>
+                            </div>
+                        </div>
+                        <small class="text-muted d-block mt-2">
+                            <i class="bi bi-calendar3 me-1"></i>@r.CapturedAt.ToString("dd MMM yyyy")
+                        </small>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

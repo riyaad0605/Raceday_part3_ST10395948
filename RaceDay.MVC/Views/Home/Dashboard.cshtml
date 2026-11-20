@@ -1,0 +1,84 @@
+@model DashboardViewModel
+@{ ViewData["Title"] = "Organiser Dashboard"; }
+
+<h2 class="fw-bold mb-4"><i class="bi bi-speedometer2 me-2" style="color: var(--rd-primary);"></i>Dashboard</h2>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card">
+            <div class="stat-number">@Model.TotalEvents</div>
+            <div class="stat-label">Total Events</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card" style="border-left-color: var(--rd-confirmed);">
+            <div class="stat-number" style="color: var(--rd-confirmed);">@Model.PublishedEvents</div>
+            <div class="stat-label">Published Events</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card" style="border-left-color: var(--rd-accent);">
+            <div class="stat-number" style="color: var(--rd-accent);">@Model.TotalEnrolments</div>
+            <div class="stat-label">Total Enrolments</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-white">
+        <h5 class="mb-0 fw-bold"><i class="bi bi-calendar-event me-2"></i>Upcoming Events</h5>
+    </div>
+    <div class="card-body">
+        @if (Model.UpcomingEvents.Count == 0)
+        {
+            <div class="empty-state py-3">
+                <i class="bi bi-calendar-plus d-block" style="font-size: 2rem;"></i>
+                <p class="mt-2">No upcoming events. <a href="/Events/Create">Create one!</a></p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Enrolled</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ev in Model.UpcomingEvents)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@ev.Name</td>
+                                <td>@ev.EventDate.ToString("dd MMM yyyy")</td>
+                                <td><span class="badge bg-info">@ev.EventType</span></td>
+                                <td>
+                                    <span class="badge badge-@ev.Status.ToLower()">@ev.Status</span>
+                                </td>
+                                <td>@ev.TotalEnrolments</td>
+                                <td>
+                                    <a href="/Enrolments/EventEnrolments?eventId=@ev.EventId" class="btn btn-sm btn-outline-raceday">
+                                        <i class="bi bi-people"></i>
+                                    </a>
+                                    <a href="/Results/EventResults?eventId=@ev.EventId" class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-stopwatch"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="/Events/Create" class="btn btn-raceday"><i class="bi bi-plus-circle me-2"></i>Create New Event</a>
+    <a href="/Events" class="btn btn-outline-raceday ms-2"><i class="bi bi-list me-2"></i>View All Events</a>
+</div>

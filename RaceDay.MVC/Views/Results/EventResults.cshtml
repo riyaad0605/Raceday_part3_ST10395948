@@ -1,0 +1,98 @@
+@model List<ResultViewModel>
+@{
+    ViewData["Title"] = $"Results - {ViewBag.EventName}";
+    var enrolments = ViewBag.Enrolments as List<EnrolmentViewModel> ?? new List<EnrolmentViewModel>();
+    var existingIds = ViewBag.ExistingEnrolmentIds as HashSet<int> ?? new HashSet<int>();
+    var unrecorded = enrolments.Where(e => !existingIds.Contains(e.EnrolmentId)).ToList();
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0"><i class="bi bi-stopwatch me-2" style="color: var(--rd-primary);"></i>Results &mdash; @ViewBag.EventName</h2>
+    <a href="/Events" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+</div>
+
+@if (unrecorded.Any())
+{
+    <div class="card mb-4">
+        <div class="card-header bg-raceday text-white">
+            <h5 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Capture Result</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" asp-action="Capture" asp-route-eventId="@ViewBag.EventId" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Participant</label>
+                    <select name="EnrolmentId" class="form-select" required>
+                        <option value="">-- Select --</option>
+                        @foreach (var en in unrecorded)
+                        {
+                            <option value="@en.EnrolmentId">@en.ParticipantName (@en.CategoryName)</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Finish Time (seconds)</label>
+                    <input type="number" name="FinishTimeSeconds" class="form-control" step="0.01" min="0" required placeholder="e.g. 3600" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold">Position</label>
+                    <input type="number" name="Position" class="form-control" min="1" required />
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-raceday w-100"><i class="bi bi-check-circle me-2"></i>Save Result</button>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+@if (Model.Count == 0)
+{
+    <div class="empty-state">
+        <i class="bi bi-clipboard-data d-block"></i>
+        <h5>No results recorded</h5>
+        <p>Use the form above to capture participant results.</p>
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>Participant</th>
+                            <th>Category</th>
+                            <th>Finish Time</th>
+                            <th>Recorded</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.OrderBy(x => x.Position))
+                        {
+                            <tr>
+                                <td>
+                                    @if (r.Position <= 3)
+                                    {
+                                        <span class="badge" style="background: @(r.Position == 1 ? "#FFD700" : r.Position == 2 ? "#C0C0C0" : "#CD7F32"); color: #333;">
+                                            #@r.Position
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">#@r.Position</span>
+                                    }
+                                </td>
+                                <td class="fw-semibold">@r.ParticipantName</td>
+                                <td>@r.CategoryName</td>
+                                <td>@r.FormattedTime</td>
+                                <td class="text-muted small">@r.CapturedAt.ToString("dd MMM yyyy HH:mm")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
