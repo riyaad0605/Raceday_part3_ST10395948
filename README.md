@@ -150,9 +150,10 @@ RaceDay/
 | GET | /api/results/my | My results |
 | PUT | /api/results/{id} | Update result |
 
-## Video Presentation
+screenshots 
+<img width="1600" height="398" alt="racedaytests" src="https://github.com/user-attachments/assets/a60ef8a6-0c4f-47d7-9984-020c31e6f4b0" />
+<img width="779" height="1023" alt="racedaypart3" src="https://github.com/user-attachments/assets/6428f305-5b30-4b64-8aba-0d924eb2f33c" />
 
-[Link to video presentation]
 
 ## Author
 
